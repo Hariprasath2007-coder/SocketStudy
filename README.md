@@ -1,5 +1,6 @@
-# Ex.No:1a  			Study of Socket Programming
-
+# Ex.No:1a    Study of Socket Programming
+## Name : HARI PRASATH E
+## Ref No : 25007799
 ## Aim: 
 To perform a study on Socket Programming
 ## Introduction:
@@ -52,6 +53,140 @@ Socket programming finds applications in various domains, including web developm
 3.	File Transfer Protocol: Protocols like FTP (File Transfer Protocol) utilize socket programming for transferring files between a client and a server.
 4.	Networked Games: Online multiplayer games rely on socket programming to facilitate communication between game clients and servers.
 5.	RPC mechanisms: which allow processes to execute code on a remote server, often use socket programming for communication.
+
+## CODE's...
+
+### 1) Clint Side
+```
+import socket
+import time
+
+client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client_socket.connect(('127.0.0.1', 12345))
+
+messages = [
+    "Hello Server!",
+    "Can you tell me about Saveetha Engineering College?",
+    "exit"
+]
+
+for msg in messages:
+    client_socket.send(msg.encode())
+    response = client_socket.recv(1024).decode()
+    print("Server:", response)
+    time.sleep(1)
+
+client_socket.close()
+
+```
+### 2) Server Side
+```
+import socket
+
+server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server_socket.bind(('127.0.0.1', 12345))
+server_socket.listen(1)
+
+print("Server is waiting for client...")
+
+conn, addr = server_socket.accept()
+print("Connected to:", addr)
+
+while True:
+    data = conn.recv(1024).decode()
+
+    if not data:
+        break
+
+    print("Client:", data)
+
+    if "hello" in data.lower():
+        reply = "Hello! Welcome to the server 😊"
+
+    elif "saveetha" in data.lower():
+        reply = "Saveetha Engineering College is one of the best colleges in Tamil Nadu 🔥"
+
+    elif "exit" in data.lower():
+        reply = "Goodbye! Connection closing..."
+        conn.send(reply.encode())
+        break
+
+    else:
+        reply = "I didn't understand that. Ask about college or say hello."
+
+    conn.send(reply.encode())
+
+conn.close()
+server_socket.close()
+```
+
+## Full Functional Code...
+```
+import socket
+import threading
+import time
+
+def server():
+    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server_socket.bind(('127.0.0.1', 12345))
+    server_socket.listen(1)
+
+    conn, addr = server_socket.accept()
+    print("Server connected to client")
+
+    while True:
+        data = conn.recv(1024).decode()
+
+        if not data:
+            break
+
+        print("Client:", data)
+
+        if "hello" in data.lower():
+            reply = "Hello! Welcome to the server 😊"
+        elif "saveetha" in data.lower():
+            reply = "Saveetha Engineering College is one of the best colleges in Tamil Nadu 🔥"
+        elif "exit" in data.lower():
+            reply = "Goodbye! Connection closing..."
+            conn.send(reply.encode())
+            break
+        else:
+            reply = "I didn't understand that. Ask about college or say hello."
+
+        conn.send(reply.encode())
+
+    conn.close()
+    server_socket.close()
+
+
+def client():
+    time.sleep(1)
+
+    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    client_socket.connect(('127.0.0.1', 12345))
+
+    messages = [
+        "Hello Server!",
+        "Can you tell me about Saveetha Engineering College?",
+        "exit"
+    ]
+
+    for msg in messages:
+        client_socket.send(msg.encode())
+        response = client_socket.recv(1024).decode()
+        print("Server:", response)
+        time.sleep(1)
+
+    client_socket.close()
+
+
+threading.Thread(target=server).start()
+threading.Thread(target=client).start()
+```
+
+
+## Output.
+<img width="1914" height="908" alt="image" src="https://github.com/user-attachments/assets/563f8547-f337-492d-b770-2ef025bf5bbf" />
 
 
 ## Result:
