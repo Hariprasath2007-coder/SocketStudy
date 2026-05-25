@@ -56,7 +56,7 @@ Socket programming finds applications in various domains, including web developm
 
 ## CODE's...
 
-### 1) Clint Side
+### 1) Client Side
 ```
 import socket
 import time
